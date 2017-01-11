@@ -1,0 +1,28 @@
+{
+  "name":"pj-poc",
+  "description":"Paste Jacking Proof of Concept",
+  "version":"0.0.2",
+  "dependencies":{
+    "coffee-script":"latest",
+    "mongoose":"latest",
+    "express":"latest",
+    "bcrypt-nodejs":"latest",
+    "body-parser":"latest",
+    "angular":"latest",
+    "angular-animate":"latest",
+    "angular-aria":"latest",
+    "angular-material":"latest",
+    "angular-messages":"latest",
+    "cookie-parser":"latest",
+    "http-auth":"latest",
+    "express-session" : "latest",
+    "https" : "latest",
+    "fs" : "latest",
+    "passport":"latest",
+    "passport-local":"latest",
+    "bcrypt-nodejs": "latest"
+  },
+  "scripts":{
+    "start":"coffee -w project.coffee"
+  }
+}
