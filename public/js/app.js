@@ -17,7 +17,8 @@
     function saveCountry(country){
       console.log(country);
       $http.post('/saveCountry',country,'Content-Type: application/json').success(function(data){
-        $scope.country = {}
+        $scope.country = {};
+        $scope.country.name=data.name;
         self.country=data;
       });
     }

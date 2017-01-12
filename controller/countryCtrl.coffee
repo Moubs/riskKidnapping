@@ -11,7 +11,6 @@ exports.create = (req, res) ->
 exports.update = (req, res) ->
   Resource = mongoose.model('Country')
   delete req.body._id
-  console.log req.body
   fields = req.body
   fields.name = fields.name.toLowerCase() if fields.name?
   if req.params.id?
@@ -23,14 +22,12 @@ exports.update = (req, res) ->
      Resource.find().byName(fields.name).update({
       $set: fields}, (err, resource) ->
         #res.send({ error: err }) if err?
-        console.log err
         Resource.findOne().byName(fields.name).exec (err, resource) ->
           res.send(resource[0]) if resource?
     )
 
 exports.save = (req,res)->
   Resource = mongoose.model('Country')
-  console.log req.body
   Resource.find().byName(req.body.name.toLowerCase()).exec (err, resource) ->
     if resource.length
       exports.update(req,res)
