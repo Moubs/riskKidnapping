@@ -1,6 +1,9 @@
 mongoose = require 'mongoose'
 
 Country = new mongoose.Schema(
+  iso:{
+    type: String
+  }
   name: {
     type: String,
     required: true,

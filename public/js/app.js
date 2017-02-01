@@ -1,5 +1,5 @@
 ( function(){
-  app = angular.module('firstApplication', ['ngMaterial']);
+  app = angular.module('firstApplication', ['ngMaterial','datamaps']);
   app.controller('mainController', ['$scope','$http', function($scope,$http){
     var self = this;
     // list of `state` value/display objects
@@ -68,9 +68,20 @@
       //console.log(self.listcountries);
       return self.listcountries
     }
+  }]);
 
-
-
-
+  app.controller("mapController",['$scope','$http',function($scope,$http){
+    $scope.mapObject = {
+      scope: 'world',
+      options: {
+        width: 1110,
+        legendHeight: 60 // optionally set the padding for the legend
+      },
+      geographyConfig: {
+        highlighBorderColor: '#EAA9A8',
+        highlighBorderWidth: 2
+      }
+    };
+    console.log($scope.mapObject);
   }]);
 })();

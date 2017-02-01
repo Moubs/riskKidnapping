@@ -6,7 +6,8 @@ exports.create = (req, res) ->
   r.save (err, resource) ->
     #res.send({error: err}) if err?
     Resource.findOne().byName(r.name).exec (err, resource) ->
-      res.send(resource[0]) if resource?
+      if res?
+        res.send(resource[0]) if resource?
 
 exports.update = (req, res) ->
   Resource = mongoose.model('Country')
@@ -23,7 +24,8 @@ exports.update = (req, res) ->
       $set: fields}, (err, resource) ->
         #res.send({ error: err }) if err?
         Resource.findOne().byName(fields.name).exec (err, resource) ->
-          res.send(resource[0]) if resource?
+          if res?
+            res.send(resource[0]) if resource?
     )
 
 exports.save = (req,res)->
@@ -33,7 +35,6 @@ exports.save = (req,res)->
       exports.update(req,res)
     else
       exports.create(req,res)
-
 
 exports.retrieve = (req, res) ->
   Resource = mongoose.model('Country')

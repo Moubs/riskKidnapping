@@ -14,6 +14,7 @@ app.set 'storage-uri'
 app.use bodyParser.json()
 
 
+
 storage_uri =   process.env.MONGOHQ_URL or
   process.env.MONGOLAB_URI or
   'mongodb://localhost/riskKidnapping'
@@ -31,8 +32,23 @@ connection = mongoose.connect storage_uri,{
 require './model/country'
 country = require './controller/countryCtrl'
 
+countries = JSON.parse(fs.readFileSync("countries.json"))
+
+for c in countries
+  count = {}
+  count.name=c.translations.fra.common
+  count.iso=c.cca3
+  req = {
+    body: count,
+    params:{}
+  }
+  country.save req
+
 app.get '/' , (req,res) ->
   res.sendFile path.join __dirname+'/public/views/index.html'
+
+app.get '/map', (req,res) ->
+  res.sendFile path.join __dirname+'/public/views/map.html'
 
 
 app.post '/saveCountry', country.save
