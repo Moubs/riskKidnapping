@@ -16,6 +16,9 @@ Country = new mongoose.Schema(
   advice:{
     type: String
   }
+  url:{
+    type: String
+  }
 )
 
 Country.query.byName = (name) ->

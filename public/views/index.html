@@ -40,6 +40,10 @@
             <label>Conseil</label>
             <textarea ng-model="country.advice"></textarea>
           </md-input-container>
+          <md-input-container class="md-block">
+            <label>Site Web référence</label>
+            <textarea ng-model="country.url"></textarea>
+          </md-input-container>
           <md-button type="submit">sauvegarder</md-button>
         </form>
         </md-content>
@@ -61,6 +65,8 @@
           <p style="white-space: pre;">
             {{ctrl.country.advice}}
           </p>
+          <h5>Site Web:</h5>
+          <a ng-href="{{ctrl.country.url}}" target="_blank">{{ctrl.country.url}}</a>
         </md-content>
       </div>
 
