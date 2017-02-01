@@ -61,6 +61,6 @@ exports.delete = (req,res) ->
 
 exports.retrieveAllNames = (req,res) ->
   Resource = mongoose.model('Country')
-  Resource.find().select('name').exec (err,coll)->
+  Resource.find().select('name').sort('name').exec (err,coll)->
     #res.send({error : err}) if err?
     res.send(coll)
