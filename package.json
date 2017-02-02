@@ -9,6 +9,7 @@
     "angular-datamaps": "^0.1.2",
     "angular-material": "latest",
     "angular-messages": "latest",
+    "angular-route":"latest",
     "bcrypt-nodejs": "latest",
     "body-parser": "latest",
     "coffee-script": "latest",

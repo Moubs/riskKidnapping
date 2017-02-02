@@ -47,9 +47,6 @@ for c in countries
 app.get '/' , (req,res) ->
   res.sendFile path.join __dirname+'/public/views/index.html'
 
-app.get '/map', (req,res) ->
-  res.sendFile path.join __dirname+'/public/views/map.html'
-
 
 app.post '/saveCountry', country.save
 

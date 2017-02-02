@@ -1,0 +1,66 @@
+<div layout="row" layout-align="space-between center">
+  <md-content layout="column" flex >
+    <h1>formulaire</h1>
+    <form ng-submit="ctrl.saveCountry(country)">
+        <md-autocomplete
+        ng-model="country.name"
+        md-no-cache="true"
+        md-selected-item="ctrl.selectedItem"
+        md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+        md-search-text="ctrl.searchText"
+        md-items="item in ctrl.querySearch(ctrl.searchText)"
+        md-item-text="item.display"
+        md-selected-item-change="ctrl.selectedItemChange(item)"
+        md-min-length="0"
+        placeholder="nom du pays">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+        </md-item-template>
+        <md-not-found>
+          No states matching "{{ctrl.searchText}}" were found.
+        </md-autocomplete>
+        <md-input-container class="md-block">
+          <label> niveau de risque</label>
+          <input type="number" min="0" max="100" ng-model="country.riskLevel">
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label> Description des risques</label>
+          <textarea ng-model="country.riskDescription"></textarea>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Conseil</label>
+          <textarea ng-model="country.advice"></textarea>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Site Web référence</label>
+          <textarea ng-model="country.url"></textarea>
+        </md-input-container>
+        <md-button type="submit">sauvegarder</md-button>
+      </form>
+      </md-content>
+      <md-content layout="column" flex >
+        <h1>Dans la base de donnée</h1>
+        <h5>nom:</h5>
+        <p>
+          {{ctrl.country.name}}
+        </p>
+        <h5>niveau de risque:</h5>
+        <p>
+          {{ctrl.country.riskLevel}}
+        </p>
+        <h5>description des risque:</h5>
+          <ul>
+            <li ng-repeat="r in ctrl.country.riskDescription">
+              {{r}}
+            </li>
+          </ul>
+        <h5>Conseil:</h5>
+        <ul>
+          <li ng-repeat="a in ctrl.country.advice">
+            {{a}}
+          </li>
+        </ul>
+        <h5>Site Web:</h5>
+        <a ng-href="{{ctrl.country.url}}" target="_blank">{{ctrl.country.url}}</a>
+      </md-content>
+    </div>

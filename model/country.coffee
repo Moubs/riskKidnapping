@@ -3,22 +3,18 @@ mongoose = require 'mongoose'
 Country = new mongoose.Schema(
   iso:{
     type: String
-  }
+  },
   name: {
     type: String,
     required: true,
     lowercase: true,
     unique: true
-  }
+  },
   riskLevel:{
     type: Number
-  }
-  riskDescription:{
-    type: String
-  }
-  advice:{
-    type: String
-  }
+  },
+  riskDescription: [String],
+  advice: [String],
   url:{
     type: String
   }

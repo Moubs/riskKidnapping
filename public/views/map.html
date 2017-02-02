@@ -1,26 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <link rel="stylesheet" href="/static/angular-material/angular-material.min.css" media="screen" title="no title" charset="utf-8">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" media="screen" title="no title" charset="utf-8">
-</head>
-<body ng-app="firstApplication" ng-cloak>
-  <div layout="row" layout-align="space-between center" ng-controller="mapController as ctrl">
-    <md-content layout="column" flex >
-      <datamap map="mapObject"></datamap>
-    </md-content>
-  </div>
-</body>
-<script src="static/angular/angular.js"></script>
-<script src="static/angular-animate/angular-animate.js"></script>
-<script src="static/angular-aria/angular-aria.js"></script>
-<script src="static/angular-messages/angular-messages.js"></script>
-<script src="static/angular-material/angular-material.js"></script>
-<script src="static/d3/d3.js" charset="utf-8"></script>
-<script src="static/topojson/dist/topojson.js" charset="utf-8"></script>
-<script src="static/datamaps/dist/datamaps.all.js" charset="utf-8"></script>
-<script src="static/angular-datamaps/dist/angular-datamaps.js" charset="utf-8"></script>
-<script src="static/js/app.js" charset="utf-8"></script>
-</html>
+<div layout="row" layout-sm="column">
+  <md-content layout="column" flex>
+    <md-autocomplete
+    ng-model="ctrl.country.name"
+    md-no-cache="true"
+    md-selected-item="ctrl.selectedItem"
+    md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+    md-search-text="ctrl.searchText"
+    md-items="item in ctrl.querySearch(ctrl.searchText)"
+    md-item-text="item.display"
+    md-selected-item-change="ctrl.selectedItemChange(item)"
+    md-min-length="0"
+    placeholder="Rechercher pays manuellement"
+    ng-if="showAutoComplete">
+    <md-item-template>
+      <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+    </md-item-template>
+    <md-not-found>
+      No states matching "{{ctrl.searchText}}" were found.
+    </md-autocomplete>
+    <datamap map="mapObject" on-click="updateActiveGeography"></datamap>
+  </md-content>
+  <md-sidenav
+        class="md-sidenav-right"
+        md-component-id="right"
+        md-is-locked-open="$mdMedia('gt-md')"
+        md-whiteframe="4">
+
+      <md-content layout="column">
+        <h1 class="md-toolbar-tools" ng-if="ctrl.country.name">{{ctrl.country.name}}</h1>
+        <h1 class="md-toolbar-tools" ng-if="!ctrl.country.name">Nom du pays</h1>
+        <h5>niveau de risque:</h5>
+        <p>
+          {{ctrl.country.riskLevel}}
+        </p>
+        <h5>description des risque:</h5>
+          <ul>
+            <li ng-repeat="r in ctrl.country.riskDescription">
+              {{r}}
+            </li>
+          </ul>
+        <h5>Conseil:</h5>
+        <ul>
+          <li ng-repeat="a in ctrl.country.advice">
+            {{a}}
+          </li>
+        </ul>
+        <h5>Site Web:</h5>
+        <a ng-href="{{ctrl.country.url}}" target="_blank">site de référence</a>
+      </md-content>
+      <md-button ng-click="closeSideNav()" class="md-primary" hide-gt-md>
+        Fermer
+      </md-button>
+
+    </md-sidenav>
+</div>
