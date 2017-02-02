@@ -57,6 +57,8 @@ app.post '/getCountry', country.retrieve
 
 app.get '/allCountryName', country.retrieveAllNames
 
+app.get '/getISOandRisk', country.isoAndRisk
+
 app.use '/static', express.static(__dirname+'/public')
 app.use '/static', express.static(__dirname+'/node_modules')
 

@@ -71,17 +71,37 @@
   }]);
 
   app.controller("mapController",['$scope','$http',function($scope,$http){
+    var paletteScale = d3.scale.linear().domain([0,50,100]).range(["#00FF00","#e2ea0d","#FF0000"]);
+    var isoAndRisk = [];
+    var dataset = {};
+    $http.get('/getISOandRisk').success(function(data){
+      console.log(data);
+      data.forEach(function(item){
+        if (item.riskLevel!= null){
+          console.log(item.iso);
+          var iso = item.iso;
+          var risk = item.riskLevel;
+          dataset[iso] = {riskLevel:risk, fillColor:paletteScale(risk)};
+        }
+      });
+      console.log(dataset);
+    });
+
     $scope.mapObject = {
       scope: 'world',
       options: {
         width: 1110,
         legendHeight: 60 // optionally set the padding for the legend
       },
+      data: dataset,
+      fils : {defaultFill: '#b9b9b9'},
       geographyConfig: {
         highlighBorderColor: '#EAA9A8',
-        highlighBorderWidth: 2
+        highlighBorderWidth: 2,
+        highlightFillColor: function(geo) {
+            return geo['fillColor'] || '#b9b9b9';
+        }
       }
     };
-    console.log($scope.mapObject);
   }]);
 })();
