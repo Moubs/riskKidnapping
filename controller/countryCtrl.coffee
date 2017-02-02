@@ -67,6 +67,6 @@ exports.retrieveAllNames = (req,res) ->
 
 exports.isoAndRisk = (req,res) ->
   Resource = mongoose.model('Country')
-  Resource.find().select('iso riskLevel').exec (err,coll)->
+  Resource.find().select('iso riskLevel name').exec (err,coll)->
     #res.send({error : err}) if err?
     res.send(coll)

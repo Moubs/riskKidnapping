@@ -77,11 +77,13 @@
     $http.get('/getISOandRisk').success(function(data){
       console.log(data);
       data.forEach(function(item){
+        var iso = item.iso;
+        var name = item.name.charAt(0).toUpperCase()+item.name.slice(1);
         if (item.riskLevel!= null){
-          console.log(item.iso);
-          var iso = item.iso;
           var risk = item.riskLevel;
-          dataset[iso] = {riskLevel:risk, fillColor:paletteScale(risk)};
+          dataset[iso] = {name:name, riskLevel:risk, fillColor:paletteScale(risk)};
+        }else{
+          dataset[iso] = {name:name, riskLevel:"non renseigné", fillColor:"#b9b9b9"};
         }
       });
       console.log(dataset);
@@ -100,6 +102,13 @@
         highlighBorderWidth: 2,
         highlightFillColor: function(geo) {
             return geo['fillColor'] || '#b9b9b9';
+        },
+        popupTemplate: function(geo,data){
+          if (!data){return ;}
+          return ['<div class="hoverinfo">',
+          '<strong>', data.name, '</strong>',
+          '<br>Niveau de risque: <strong>', data.riskLevel, '</strong>',
+          '</div>'].join('');
         }
       }
     };
