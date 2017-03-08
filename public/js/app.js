@@ -23,6 +23,11 @@
       controller:"signinController",
       controllerAs:"ctrl"
     })
+    .when("/listUsers",{
+      templateUrl:"/static/views/listUsers.html",
+      controller:"usersController",
+      controllerAs:"ctrl"
+    })
   });
 
   app.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
@@ -63,6 +68,13 @@
   app.controller("mainController",['$scope', 'Auth', '$location', '$http',function ($scope, Auth, $location, $http) {
   $scope.isLogged = Auth.isLoggedIn;
   $scope.isAdmin = Auth.isAdmin;
+  $scope.logout = function(){
+    $http.get("/logout").success(function(data){
+      var user;
+      Auth.setAdmin(false);
+      Auth.setUser(user);
+    });
+  };
   $scope.$watch(Auth.isLoggedIn, function (value, oldValue) {
 
      if(!value && oldValue) {
@@ -75,6 +87,7 @@
        //Do something when the user is connected
        $location.path('/');
        $http.get("/isAdmin").success(function(data){
+         console.log(data);
          if(data)
           Auth.setAdmin(data);
        });
@@ -85,6 +98,20 @@
      if (data)
       Auth.setUser(true);
    });
+  }]);
+
+  app.controller('usersController',['$scope','$http', function($scope,$http){
+    $scope.users=[];
+    $http.get("/getUsers").success(function(data){
+      $scope.users = data;
+    });
+    $scope.grantAdmin = function(email){
+      var data ={};
+      data.email = email;
+      $http.post("/grantAdmin",data,'Content-Type : application/json').success(function(data){
+        $scope.users = data;
+      });
+    }
   }]);
 
   app.controller('loginController',['$scope','Auth','$http',function($scope,Auth,$http){

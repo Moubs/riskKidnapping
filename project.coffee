@@ -62,14 +62,12 @@ for c in countries
 
 
 isAdmin = (req, res, next) ->
-  req.session.isAdmin = users.isAdmin(req,res)
+  users.isAdmin(req,res)
   if (req.session.isAdmin)
     return next()
 
 isAuth = (req, res, next) ->
-  console.log req.session
   if (req.session.isLog)
-    console.log "here"
     return next()
   else
     res.status(406).send()
@@ -92,6 +90,10 @@ app.get '/allCountryName', isAuth, country.retrieveAllNames
 
 app.get '/getISOandRisk', isAuth, country.isoAndRisk
 
+app.get '/getUsers', isAuth, isAdmin, users.GetAllUsers
+
+app.post '/grantAdmin', isAuth, isAdmin, users.grantAdmin
+
 app.use '/static', express.static(__dirname+'/public')
 app.use '/static', express.static(__dirname+'/node_modules')
 
@@ -102,13 +104,13 @@ app.get '/isLog', (req,res) ->
     res.send(false)
 
 app.get '/isAdmin', (req,res) ->
-  if users.isAdmin(req,res)
+  users.isAdmin(req,res)
+  if(req.session.isAdmin)
     res.send(true)
   else
     res.send(false)
 
 app.get '/logout', (req,res) ->
-  console.log 'bla'
   req.session.destroy()
   res.send({})
 

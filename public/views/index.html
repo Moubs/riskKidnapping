@@ -8,18 +8,24 @@
 </head>
 <body  ng-cloak ng-controller="mainController">
   <md-toolbar>
-     <div class="md-toolbar-tools">
+     <div layout="row" class="md-toolbar-tools">
        <md-button ng-href="#" ng-if="isLogged()">
          Carte
        </md-button>
        <md-button ng-href="#modifyDB" ng-if="isLogged() && isAdmin()">
          Accès formulaire
        </md-button>
+       <md-button ng-href="#listUsers" ng-if="isLogged() && isAdmin()">
+         liste des utilisateurs
+       </md-button>
        <md-button ng-href="#login" ng-if="!isLogged()">
          se connecter
        </md-button>
        <md-button ng-href="#signin" ng-if="!isLogged()">
          s'inscrire
+       </md-button>
+       <md-button ng-click="logout()"  ng-if="isLogged()">
+         Deconnexion
        </md-button>
      </div>
    </md-toolbar>
