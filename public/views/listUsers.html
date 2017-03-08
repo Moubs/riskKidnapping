@@ -1,0 +1,6 @@
+<div class="">
+  <ul ng-repeat="user in users">
+    <li>{{user.local.email}} <md-button ng-click="grantAdmin(user.local.email)" class="md-raised md-primary" ng-if="!user.local.admin"> Admin</md-button>
+    </li>
+  </ul>
+</div>

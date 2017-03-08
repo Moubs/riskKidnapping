@@ -1,0 +1,23 @@
+<div style="width:100%;" layout="row" layout-align="center center">
+  <md-card md-theme="default" md-theme-watch flex=50  >
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">S'inscrire</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-divider/>
+    <md-card-text>
+      <md-input-container class="md-block">
+        <label>Adresse mail</label>
+        <input type="email" ng-model="user.email"></input>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Conseil</label>
+        <input type="password" ng-model="user.password"></input>
+      </md-input-container>
+    </md-card-text>
+    <md-card-actions layout="row" layout-align="end center">
+      <md-button ng-click="register()">s'inscrire</md-button>
+    </md-card-actions>
+  </md-card>
+</div>
