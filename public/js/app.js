@@ -1,6 +1,7 @@
 ( function(){
   app = angular.module('firstApplication', ['ngMaterial','datamaps','ngRoute']);
-  app.config(function($routeProvider){
+  app.config(function($routeProvider, $httpProvider){
+    $httpProvider.defaults.withCredentials = true;
     $routeProvider
     .when("/",{
       controller:"mapController",
@@ -12,7 +13,96 @@
       controller:"dbController",
       controllerAs:"ctrl"
     })
+    .when("/login",{
+      templateUrl:"/static/views/login.html",
+      controller:"loginController",
+      controllerAs:"ctrl"
+    })
+    .when("/signin",{
+      templateUrl:"/static/views/signin.html",
+      controller:"signinController",
+      controllerAs:"ctrl"
+    })
   });
+
+  app.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+    $rootScope.$on('$routeChangeStart', function (event) {
+        if (!Auth.isLoggedIn() && ($location.path()!="/login" && $location.path()!="/signin")) {
+            console.log('DENY');
+            event.preventDefault();
+            $location.path('/login');
+        }else{
+          /*
+          if(!Auth.isAdmin() && $location.path()!=="/")
+            $location.path("/");
+            //*/
+        }
+    });
+  }]);
+
+  app.factory('Auth',function(){
+    var user;
+    var admin = false;
+    return{
+      setUser : function(aUser){
+        user = aUser;
+      },
+      isLoggedIn : function(){
+        return(user)? user : false;
+      },
+      setAdmin : function(aAdmin){
+        admin=aAdmin;
+      },
+      isAdmin : function(){
+        return(admin)? admin: false;
+      }
+    };
+  });
+
+
+  app.controller("mainController",['$scope', 'Auth', '$location', '$http',function ($scope, Auth, $location, $http) {
+  $scope.isLogged = Auth.isLoggedIn;
+  $scope.isAdmin = Auth.isAdmin;
+  $scope.$watch(Auth.isLoggedIn, function (value, oldValue) {
+
+     if(!value && oldValue) {
+       console.log("Disconnect");
+       $location.path('/login');
+     }
+
+     if(value) {
+       console.log("Connect");
+       //Do something when the user is connected
+       $location.path('/');
+       $http.get("/isAdmin").success(function(data){
+         if(data)
+          Auth.setAdmin(data);
+       });
+     }
+
+   }, true);
+   $http.get("/isLog").success(function(data){
+     if (data)
+      Auth.setUser(true);
+   });
+  }]);
+
+  app.controller('loginController',['$scope','Auth','$http',function($scope,Auth,$http){
+    $scope.login = function(){
+      $http.post('/login',$scope.user,'Content-Type: application/json').success(function(data){
+        Auth.setUser(data);
+      });
+    }
+  }]);
+
+  app.controller('signinController',['$scope','Auth','$http',function($scope,Auth,$http){
+    $scope.register = function(){
+      $http.post('/register',$scope.user,'Content-Type: application/json').success(function(data){
+        Auth.setUser(data);
+      });
+    }
+  }]);
+
   app.controller('dbController', ['$scope','$http', function($scope,$http){
     var self = this;
     // list of `state` value/display objects
@@ -88,7 +178,7 @@
   }]);
 
   app.controller("mapController",['$scope','$http', '$mdSidenav',function($scope,$http,$mdSidenav){
-    var paletteScale = d3.scale.linear().domain([0,50,100]).range(["#00FF00","#e2ea0d","#FF0000"]);
+    var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#00FF00","#e2ea0d","#FF0000"]);
     var isoAndRisk = [];
     var dataset = {};
     $scope.showAutoComplete = true;

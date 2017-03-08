@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="firstApplication">
 <head>
   <meta charset="utf-8">
   <title></title>
   <link rel="stylesheet" href="/static/angular-material/angular-material.min.css" media="screen" title="no title" charset="utf-8">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" media="screen" title="no title" charset="utf-8">
 </head>
-<body ng-app="firstApplication" ng-cloak>
+<body  ng-cloak ng-controller="mainController">
   <md-toolbar>
      <div class="md-toolbar-tools">
-       <md-button ng-href="#">
+       <md-button ng-href="#" ng-if="isLogged()">
          Carte
        </md-button>
-       <md-button ng-href="#modifyDB">
+       <md-button ng-href="#modifyDB" ng-if="isLogged() && isAdmin()">
          Accès formulaire
+       </md-button>
+       <md-button ng-href="#login" ng-if="!isLogged()">
+         se connecter
+       </md-button>
+       <md-button ng-href="#signin" ng-if="!isLogged()">
+         s'inscrire
        </md-button>
      </div>
    </md-toolbar>

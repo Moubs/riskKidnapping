@@ -1,6 +1,8 @@
 express = require 'express'
 mongoose = require 'mongoose'
 bodyParser = require 'body-parser'
+passport = require 'passport'
+session = require 'express-session'
 fs = require 'fs'
 
 path = require 'path'
@@ -28,9 +30,22 @@ connection = mongoose.connect storage_uri,{
     else
       console.log "Mongoose - connection OK"
 
+require('./controller/passport')(passport)
 
 require './model/country'
 country = require './controller/countryCtrl'
+users = require './controller/usersCtrl'
+
+require './model/user'
+
+
+app.use session({secret:'moubilesmeilleurs', name:'session',
+cookie:{
+  maxAge : 36000000
+  }})
+app.use passport.initialize()
+app.use passport.session()
+
 
 countries = JSON.parse(fs.readFileSync("countries.json"))
 
@@ -44,20 +59,84 @@ for c in countries
   }
   country.save req
 
+
+
+isAdmin = (req, res, next) ->
+  req.session.isAdmin = users.isAdmin(req,res)
+  if (req.session.isAdmin)
+    return next()
+
+isAuth = (req, res, next) ->
+  console.log req.session
+  if (req.session.isLog)
+    console.log "here"
+    return next()
+  else
+    res.status(406).send()
+
+saveLog = (req, res) ->
+  req.session.isLog = true
+  res.send req.body.email
+
 app.get '/' , (req,res) ->
+  req.session.reload( () ->
+    )
   res.sendFile path.join __dirname+'/public/views/index.html'
 
 
-app.post '/saveCountry', country.save
+app.post '/saveCountry', isAuth, isAdmin, country.save
 
-app.post '/getCountry', country.retrieve
+app.post '/getCountry', isAuth, country.retrieve
 
-app.get '/allCountryName', country.retrieveAllNames
+app.get '/allCountryName', isAuth, country.retrieveAllNames
 
-app.get '/getISOandRisk', country.isoAndRisk
+app.get '/getISOandRisk', isAuth, country.isoAndRisk
 
 app.use '/static', express.static(__dirname+'/public')
 app.use '/static', express.static(__dirname+'/node_modules')
+
+app.get '/isLog', (req,res) ->
+  if(req.session.isLog?)
+    res.send(true)
+  else
+    res.send(false)
+
+app.get '/isAdmin', (req,res) ->
+  if users.isAdmin(req,res)
+    res.send(true)
+  else
+    res.send(false)
+
+app.get '/logout', (req,res) ->
+  console.log 'bla'
+  req.session.destroy()
+  res.send({})
+
+app.post '/register', ((req, res, next) ->
+  passport.authenticate('local-signup', (err, user, info) ->
+    if err
+      return res.status(406).send({error : err})
+    if !user
+      return res.status(406).send(info)
+    req.logIn user, (err) ->
+      if err
+        return res.status(406).send({error : err})
+      return next()
+  ) req, res, next) , saveLog
+
+app.post '/login', ((req, res, next) ->
+  passport.authenticate('local-login', (err, user, info) ->
+    if err
+      return res.status(406).send({error : err})
+    if !user
+      return res.status(406).send(info)
+    req.logIn user, (err) ->
+      if err
+        return res.status(406).send({error : err})
+      if(user.local.admin)
+        req.session.isAdmin = true
+    return next()
+  ) req, res, next ), saveLog
 
 
 app.listen app.get('port')
