@@ -208,7 +208,7 @@
   }]);
 
   app.controller("mapController",['$scope','$http', '$mdSidenav',function($scope,$http,$mdSidenav){
-    var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#00FF00","#e2ea0d","#FF0000"]);
+    var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#1DD41D","#e2ea0d","#E40E01"]);
     var isoAndRisk = [];
     var dataset = {};
     $scope.showAutoComplete = true;
