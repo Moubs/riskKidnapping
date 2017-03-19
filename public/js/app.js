@@ -28,6 +28,9 @@
       controller:"usersController",
       controllerAs:"ctrl"
     })
+    .when("/contact",{
+      templateUrl:"/static/views/contact.html"
+    });
   });
 
   app.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
@@ -205,7 +208,7 @@
   }]);
 
   app.controller("mapController",['$scope','$http', '$mdSidenav',function($scope,$http,$mdSidenav){
-    var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#00FF00","#e2ea0d","#FF0000"]);
+    var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#00FF00","#F17507","#FF0000","#FFFFFF"]);
     var isoAndRisk = [];
     var dataset = {};
     $scope.showAutoComplete = true;

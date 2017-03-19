@@ -6,27 +6,38 @@
   <link rel="stylesheet" href="/static/angular-material/angular-material.min.css" media="screen" title="no title" charset="utf-8">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" media="screen" title="no title" charset="utf-8">
 </head>
-<body  ng-cloak ng-controller="mainController">
+<body  ng-cloak ng-controller="mainController" style="background:#68c8ef">
   <md-toolbar>
-     <div layout="row" class="md-toolbar-tools">
-       <md-button ng-href="#" ng-if="isLogged()">
-         Carte
-       </md-button>
-       <md-button ng-href="#modifyDB" ng-if="isLogged() && isAdmin()">
-         Accès formulaire
-       </md-button>
-       <md-button ng-href="#listUsers" ng-if="isLogged() && isAdmin()">
-         liste des utilisateurs
-       </md-button>
-       <md-button ng-href="#login" ng-if="!isLogged()">
-         se connecter
-       </md-button>
-       <md-button ng-href="#signin" ng-if="!isLogged()">
-         s'inscrire
-       </md-button>
-       <md-button ng-click="logout()"  ng-if="isLogged()">
-         Deconnexion
-       </md-button>
+     <div layout="row" class="md-toolbar-tools" layout-align="space-between center">
+       <div class="">
+         <md-button ng-href="#" ng-if="isLogged()">
+           Carte
+         </md-button>
+         <md-button ng-href="#modifyDB" ng-if="isLogged() && isAdmin()">
+           Accès formulaire
+         </md-button>
+         <md-button ng-href="#listUsers" ng-if="isLogged() && isAdmin()">
+           liste des utilisateurs
+         </md-button>
+         <md-button ng-href="#login" ng-if="!isLogged()">
+           se connecter
+         </md-button>
+         <md-button ng-href="#signin" ng-if="!isLogged()">
+           s'inscrire
+         </md-button>
+         <md-button ng-href="#contact" ng-if="isLogged()">
+           contact
+         </md-button>
+         <md-button href="https://pastel.diplomatie.gouv.fr/fildariane/dyn/public/login.html" target="_blank" ng-if="isLogged()">
+           Ariane
+         </md-button>
+         <md-button ng-click="logout()"  ng-if="isLogged()">
+           Deconnexion
+         </md-button>
+       </div>
+       <div style="margin-right:3%">
+         <img src="/static/img/logoDiOT.png" style="margin-top:5px;height:60px;"/>
+       </div>
      </div>
    </md-toolbar>
   <ng-view></ng-view>
