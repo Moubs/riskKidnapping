@@ -18,22 +18,21 @@
     <md-not-found>
       No states matching "{{ctrl.searchText}}" were found.
     </md-autocomplete>
-    <datamap map="mapObject" on-click="updateActiveGeography" style="background:#004586;"></datamap>
+    <datamap id="map" map="mapObject" zoomable="True" on-click="updateActiveGeography" style="background:#004586"></datamap>
   </md-content>
   <md-sidenav
         class="md-sidenav-right"
         md-component-id="right"
-        md-is-locked-open="$mdMedia('gt-md')"
         md-whiteframe="4">
 
       <md-content layout="column">
         <h1 class="md-toolbar-tools" ng-if="ctrl.country.name">{{ctrl.country.name}}</h1>
         <h1 class="md-toolbar-tools" ng-if="!ctrl.country.name">Nom du pays</h1>
-        <h5>niveau de risque:</h5>
-        <p>
+        <h5>Niveau de risque:</h5>
+        <span>
           {{ctrl.country.riskLevel}}
-        </p>
-        <h5>description des risque:</h5>
+        </span>
+        <h5>Description des risques:</h5>
           <ul>
             <li ng-repeat="r in ctrl.country.riskDescription">
               {{r}}
@@ -46,11 +45,12 @@
           </li>
         </ul>
         <h5>Site Web:</h5>
-        <a ng-href="{{ctrl.country.url}}" target="_blank">site de référence</a>
+        <a ng-href="{{ctrl.country.url}}" target="_blank">Site de référence</a>
       </md-content>
-      <md-button ng-click="closeSideNav()" class="md-primary" hide-gt-md>
+      <md-button ng-click="closeSideNav()" class="md-primary">
         Fermer
       </md-button>
 
     </md-sidenav>
 </div>
+<link rel="stylesheet" href="static/css/mycss.css" media="screen" title="no title" charset="utf-8">

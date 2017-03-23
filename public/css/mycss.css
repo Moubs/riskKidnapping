@@ -1,0 +1,7 @@
+md-sidenav,
+md-sidenav.md-locked-open,
+md-sidenav.md-closed.md-locked-open-add-active {
+    min-width: 200px !important;
+    width: 35% !important;
+    max-width: 100% !important;
+}

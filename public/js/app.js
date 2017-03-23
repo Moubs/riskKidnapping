@@ -207,7 +207,7 @@
     }
   }]);
 
-  app.controller("mapController",['$scope','$http', '$mdSidenav',function($scope,$http,$mdSidenav){
+  app.controller("mapController",['$scope','$http', '$mdSidenav','$window',function($scope,$http,$mdSidenav,$window){
     var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#1DD41D","#e2ea0d","#E40E01"]);
     var isoAndRisk = [];
     var dataset = {};
@@ -231,7 +231,7 @@
     $scope.mapObject = {
       scope: 'world',
       options: {
-        height: 700
+        height: $window.innerHeight - 50
       },
       data: dataset,
       fils : {defaultFill: '#b9b9b9'},
@@ -253,6 +253,7 @@
 
     $scope.updateActiveGeography = function(geo){
       console.log(geo.id);
+      console.log(geo);
       item = {value:dataset[geo.id].name};
       selectedItemChange(item);
     }
@@ -307,7 +308,7 @@
         self.listcountries = data.map(function(country){
           return {
             value: country.name.toLowerCase(),
-            display: country.name
+            display: country.name.charAt(0).toUpperCase() + country.name.slice(1)
           }
         });
       });
