@@ -10,6 +10,7 @@ Country = new mongoose.Schema(
     lowercase: true,
     unique: true
   },
+  currency: [String],
   riskLevel:{
     type: Number
   },

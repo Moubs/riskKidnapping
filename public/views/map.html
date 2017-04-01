@@ -26,8 +26,13 @@
         md-whiteframe="4">
 
       <md-content layout="column">
-        <h1 class="md-toolbar-tools" ng-if="ctrl.country.name">{{ctrl.country.name}}</h1>
-        <h1 class="md-toolbar-tools" ng-if="!ctrl.country.name">Nom du pays</h1>
+        <div layout="row" class="md-toolbar-tools" layout-align="space-between center">
+          <h1  ng-if="ctrl.country.name">{{ctrl.country.name}}</h1>
+          <h1 ng-if="!ctrl.country.name">Nom du pays</h1>
+          <div layout="row" ng-if="ctrl.country.currency" layout-align="center center">
+            <h3 ng-repeat="c in ctrl.country.currency">{{c}}<t ng-show="$index !=ctrl.country.currency.length-1">,</t></h3>
+          </div>
+        </div>
         <h5>Niveau de risque:</h5>
         <span>
           {{ctrl.country.riskLevel}}

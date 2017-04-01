@@ -48,11 +48,18 @@ app.use passport.session()
 
 
 countries = JSON.parse(fs.readFileSync("countries.json"))
+currency = JSON.parse(fs.readFileSync("currencymap.json"))
 
 for c in countries
   count = {}
   count.name=c.translations.fra.common
   count.iso=c.cca3
+  count.currency=[]
+  for m in c.currency
+    if currency[m]?
+      count.currency.push(currency[m].symbol)
+    else
+      count.currency.push(m)
   req = {
     body: count,
     params:{}
