@@ -23,9 +23,10 @@
   <md-sidenav
         class="md-sidenav-right"
         md-component-id="right"
-        md-whiteframe="4">
+        md-whiteframe="4"
+        style="background:#FFFFFFCC">
 
-      <md-content layout="column">
+      <md-content layout="column" style="background:#FFFFFF00">
         <div layout="row" class="md-toolbar-tools" layout-align="space-between center">
           <h1  ng-if="ctrl.country.name">{{ctrl.country.name}}</h1>
           <h1 ng-if="!ctrl.country.name">Nom du pays</h1>
@@ -33,24 +34,32 @@
             <h3 ng-repeat="c in ctrl.country.currency">{{c}}<t ng-show="$index !=ctrl.country.currency.length-1">,</t></h3>
           </div>
         </div>
-        <h5>Niveau de risque:</h5>
-        <span>
-          {{ctrl.country.riskLevel}}
-        </span>
-        <h5>Description des risques:</h5>
-          <ul>
+        <div layout="row" layout-align="left center">
+          <h5 style="padding-right:3em">Niveau de risque:</h5>
+          <span>
+            {{ctrl.country.riskLevel}}
+          </span>
+        </div>
+        <div >
+          <h5>Description des risques:</h5>
+          <ul style="list-style-type:disc">
             <li ng-repeat="r in ctrl.country.riskDescription">
               {{r}}
             </li>
           </ul>
-        <h5>Conseil:</h5>
-        <ul>
-          <li ng-repeat="a in ctrl.country.advice">
-            {{a}}
-          </li>
-        </ul>
-        <h5>Site Web:</h5>
-        <a ng-href="{{ctrl.country.url}}" target="_blank">Site de référence</a>
+        </div>
+        <div>
+          <h5>Conseil:</h5>
+          <ul style="list-style-type:disc">
+            <li ng-repeat="a in ctrl.country.advice">
+              {{a}}
+            </li>
+          </ul>
+        </div>
+        <div layout="row" layout-align="left center">
+          <h5 style="padding-right:3em">Site Web:</h5>
+          <a ng-href="{{ctrl.country.url}}" target="_blank">Site de référence</a>
+        </div>
       </md-content>
       <md-button ng-click="closeSideNav()" class="md-primary">
         Fermer

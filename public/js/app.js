@@ -78,6 +78,13 @@
       Auth.setUser(user);
     });
   };
+  $scope.$watch(function(){return $location.path()},function(value,oldvalue){
+    if (value=="/"){
+      $scope.style={ "overflow": "hidden"};
+    }else {
+      $scope.style={ "overflow":"auto"};
+    }
+  });
   $scope.$watch(Auth.isLoggedIn, function (value, oldValue) {
 
      if(!value && oldValue) {
@@ -210,7 +217,8 @@
   app.controller("mapController",['$scope','$http', '$mdSidenav','$window',function($scope,$http,$mdSidenav,$window){
     var paletteScale = d3.scale.linear().domain([1,2,4]).range(["#1DD41D","#e2ea0d","#E40E01"]);
     var isoAndRisk = [];
-    var dataset = {};
+    var staticDataset = {};
+    $scope.dataset = {};
     $scope.showAutoComplete = true;
     $http.get('/getISOandRisk').success(function(data){
       console.log(data);
@@ -219,12 +227,19 @@
         var name = item.name.charAt(0).toUpperCase()+item.name.slice(1);
         if (item.riskLevel!= null){
           var risk = item.riskLevel;
-          dataset[iso] = {name:name, riskLevel:risk, fillColor:paletteScale(risk)};
+          $scope.dataset[iso] = {name:name, riskLevel:risk, fillColor:paletteScale(risk)};
+          staticDataset[iso] = {name:name, riskLevel:risk, fillColor:paletteScale(risk)};
         }else{
-          dataset[iso] = {name:name, riskLevel:"non renseigné", fillColor:"#b9b9b9"};
+          $scope.dataset[iso] = {name:name, riskLevel:"non renseigné", fillColor:"#b9b9b9"};
+          staticDataset[iso] = {name:name, riskLevel:"non renseigné", fillColor:"#b9b9b9"};
         }
       });
-      console.log(dataset);
+      console.log($scope.dataset);
+    });
+    $scope.$watch(function(){return $mdSidenav("right").isOpen();},function(value){
+      if (value==false){
+        resetColor();
+      }
     });
     $scope.toggleRight = function(){$mdSidenav("right").toggle();};
     $scope.closeSideNav = function(){$mdSidenav("right").close();};
@@ -233,7 +248,7 @@
       options: {
         height: $window.innerHeight - 50
       },
-      data: dataset,
+      data: $scope.dataset,
       fils : {defaultFill: '#b9b9b9'},
       geographyConfig: {
         highlighBorderColor: '#EAA9A8',
@@ -254,7 +269,7 @@
     $scope.updateActiveGeography = function(geo){
       console.log(geo.id);
       console.log(geo);
-      item = {value:dataset[geo.id].name};
+      item = {value:$scope.dataset[geo.id].name};
       selectedItemChange(item);
     }
 
@@ -270,12 +285,20 @@
     $scope.country = {};
     loadAll();
 
+    function resetColor(){
+      for (c in $scope.dataset){
+        $scope.dataset[c].fillColor = staticDataset[c].fillColor
+      }
+    }
+
     function selectedItemChange(item){
       if (item!=null){
         self.country.name = item.value;
         $http.post('/getCountry',self.country,'Content-Type: application/json').success(function(data){
           self.country = data;
           self.country.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+          resetColor();
+          $scope.dataset[data.iso].fillColor="#fa0fa0";
           if(!$mdSidenav("right").isOpen())
             $scope.toggleRight();
         });
