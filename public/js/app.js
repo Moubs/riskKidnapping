@@ -30,6 +30,9 @@
     })
     .when("/contact",{
       templateUrl:"/static/views/contact.html"
+    })
+    .when("/converter",{
+      templateUrl:"/static/views/converter.html"
     });
   });
 
@@ -290,49 +293,6 @@
     };
 
     $scope.updateActiveGeography = function(geo){
-      /*
-      nbr_point =0;
-      max_x = -9999;
-      min_x = 99999;
-      max_y = -9999;
-      min_y= 9999;
-      $scope.center=[0,0];
-      geo.geometry.coordinates.forEach(function(c){
-        c.forEach(function(coord){
-          if(coord[0].constructor===Array){
-            coord.forEach(function(coord){
-              nbr_point++;
-              max_x = Math.max(max_x,coord[0]);
-              min_x = Math.min(min_x,coord[0]);
-              max_y = Math.max(max_y,coord[1]);
-              min_y = Math.min(min_y,coord[1]);
-              $scope.center[0]+=coord[0];
-              $scope.center[1]+=coord[1];
-            });
-          }else{
-            nbr_point++;
-            max_x = Math.max(max_x,coord[0]);
-            min_x = Math.min(min_x,coord[0]);
-            max_y = Math.max(max_y,coord[1]);
-            min_y = Math.min(min_y,coord[1]);
-            $scope.center[0]+=coord[0];
-            $scope.center[1]+=coord[1];
-          }
-        });
-      });
-      height=max_y-min_y;
-      width=max_x-min_x;
-      if(width<height){
-        $scope.scale= $window.innerWidth * 600/width/(1868/20);
-      }else {
-        $scope.scale= $window.innerHeight * 600/height/(989/20);
-      }
-      $scope.center[0]/=nbr_point;
-      $scope.center[1]/=nbr_point;
-      console.log($scope.center);
-      $scope.center[0]+= ($window.innerWidth/$scope.scale)*10;
-      console.log($scope.center);
-      //*/
       item = {value:$scope.dataset[geo.id].name};
       selectedItemChange(item);
     }
@@ -404,9 +364,7 @@
       }
       $scope.center[0]/=nbr_point;
       $scope.center[1]/=nbr_point;
-      console.log($scope.center);
       $scope.center[0]+= ($window.innerWidth/$scope.scale)*10;
-      console.log($scope.center);
       //*/
     }
 
