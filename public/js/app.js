@@ -219,6 +219,8 @@
     var isoAndRisk = [];
     var staticDataset = {};
     $scope.dataset = {};
+    $scope.myd3= {path:{},
+                projection:{}};
     $scope.showAutoComplete = true;
     $http.get('/getISOandRisk').success(function(data){
       console.log(data);
@@ -243,8 +245,29 @@
     });
     $scope.toggleRight = function(){$mdSidenav("right").toggle();};
     $scope.closeSideNav = function(){$mdSidenav("right").close();};
+
+    function minWidthHeigth(){
+      if ($window.innerHeight<=$window.innerWidth){
+        return $window.innerHeight * 300/989;
+      } else {
+        return $window.innerWidth * 300/1868;
+      }
+    }
+    $scope.center=[0,0];
+    $scope.scale= minWidthHeigth();
     $scope.mapObject = {
       scope: 'world',
+      //*
+      setProjection: function(element) {
+        var projection = d3.geo.equirectangular()
+        .center($scope.center)
+        .scale($scope.scale)
+        .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+      var path = d3.geo.path()
+        .projection(projection);
+      console.log(element.offsetHeight);
+      return {path: path, projection: projection};
+      },//*/
       options: {
         height: $window.innerHeight - 50
       },
@@ -267,8 +290,49 @@
     };
 
     $scope.updateActiveGeography = function(geo){
-      console.log(geo.id);
-      console.log(geo);
+      /*
+      nbr_point =0;
+      max_x = -9999;
+      min_x = 99999;
+      max_y = -9999;
+      min_y= 9999;
+      $scope.center=[0,0];
+      geo.geometry.coordinates.forEach(function(c){
+        c.forEach(function(coord){
+          if(coord[0].constructor===Array){
+            coord.forEach(function(coord){
+              nbr_point++;
+              max_x = Math.max(max_x,coord[0]);
+              min_x = Math.min(min_x,coord[0]);
+              max_y = Math.max(max_y,coord[1]);
+              min_y = Math.min(min_y,coord[1]);
+              $scope.center[0]+=coord[0];
+              $scope.center[1]+=coord[1];
+            });
+          }else{
+            nbr_point++;
+            max_x = Math.max(max_x,coord[0]);
+            min_x = Math.min(min_x,coord[0]);
+            max_y = Math.max(max_y,coord[1]);
+            min_y = Math.min(min_y,coord[1]);
+            $scope.center[0]+=coord[0];
+            $scope.center[1]+=coord[1];
+          }
+        });
+      });
+      height=max_y-min_y;
+      width=max_x-min_x;
+      if(width<height){
+        $scope.scale= $window.innerWidth * 600/width/(1868/20);
+      }else {
+        $scope.scale= $window.innerHeight * 600/height/(989/20);
+      }
+      $scope.center[0]/=nbr_point;
+      $scope.center[1]/=nbr_point;
+      console.log($scope.center);
+      $scope.center[0]+= ($window.innerWidth/$scope.scale)*10;
+      console.log($scope.center);
+      //*/
       item = {value:$scope.dataset[geo.id].name};
       selectedItemChange(item);
     }
@@ -286,9 +350,64 @@
     loadAll();
 
     function resetColor(){
+      $scope.myd3.path=d3.geo.path();
+      $scope.myd3.projection=d3.geo.path().projection();
       for (c in $scope.dataset){
         $scope.dataset[c].fillColor = staticDataset[c].fillColor
       }
+      /*
+      $scope.mapObject.setProjection= function(element){
+        return $scope.myd3;
+      }
+      //*/
+    }
+
+    function centerAndZoom(data){
+
+      var geo = d3.selectAll("."+data.iso)[0][0].__data__;
+      //*
+      nbr_point =0;
+      max_x = -9999;
+      min_x = 99999;
+      max_y = -9999;
+      min_y= 9999;
+      $scope.center=[0,0];
+      geo.geometry.coordinates.forEach(function(c){
+        c.forEach(function(coord){
+          if(coord[0].constructor===Array){
+            coord.forEach(function(coord){
+              nbr_point++;
+              max_x = Math.max(max_x,coord[0]);
+              min_x = Math.min(min_x,coord[0]);
+              max_y = Math.max(max_y,coord[1]);
+              min_y = Math.min(min_y,coord[1]);
+              $scope.center[0]+=coord[0];
+              $scope.center[1]+=coord[1];
+            });
+          }else{
+            nbr_point++;
+            max_x = Math.max(max_x,coord[0]);
+            min_x = Math.min(min_x,coord[0]);
+            max_y = Math.max(max_y,coord[1]);
+            min_y = Math.min(min_y,coord[1]);
+            $scope.center[0]+=coord[0];
+            $scope.center[1]+=coord[1];
+          }
+        });
+      });
+      height=max_y-min_y;
+      width=max_x-min_x;
+      if(width<height){
+        $scope.scale= $window.innerWidth * 600/width/(1868/20);
+      }else {
+        $scope.scale= $window.innerHeight * 600/height/(989/20);
+      }
+      $scope.center[0]/=nbr_point;
+      $scope.center[1]/=nbr_point;
+      console.log($scope.center);
+      $scope.center[0]+= ($window.innerWidth/$scope.scale)*10;
+      console.log($scope.center);
+      //*/
     }
 
     function selectedItemChange(item){
@@ -297,10 +416,11 @@
         $http.post('/getCountry',self.country,'Content-Type: application/json').success(function(data){
           self.country = data;
           self.country.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
-          resetColor();
-          $scope.dataset[data.iso].fillColor="#fa0fa0";
           if(!$mdSidenav("right").isOpen())
             $scope.toggleRight();
+          centerAndZoom(data);
+          resetColor();
+          $scope.dataset[data.iso].fillColor="#fa0fa0";
         });
       }
     }
