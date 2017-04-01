@@ -226,7 +226,6 @@
                 projection:{}};
     $scope.showAutoComplete = true;
     $http.get('/getISOandRisk').success(function(data){
-      console.log(data);
       data.forEach(function(item){
         var iso = item.iso;
         var name = item.name.charAt(0).toUpperCase()+item.name.slice(1);
@@ -239,7 +238,6 @@
           staticDataset[iso] = {name:name, riskLevel:"non renseigné", fillColor:"#b9b9b9"};
         }
       });
-      console.log($scope.dataset);
     });
     $scope.$watch(function(){return $mdSidenav("right").isOpen();},function(value){
       if (value==false){
@@ -268,7 +266,6 @@
         .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
       var path = d3.geo.path()
         .projection(projection);
-      console.log(element.offsetHeight);
       return {path: path, projection: projection};
       },//*/
       options: {
@@ -291,10 +288,22 @@
         }
       }
     };
+    $scope.dragdrop = false;
+    $scope.mouseMove=function(){
+      if ($scope.mousedown){
+        $scope.dragdrop = true;
+      }else{
+        $scope.dragdrop = false;
+      }
+    }
 
     $scope.updateActiveGeography = function(geo){
-      item = {value:$scope.dataset[geo.id].name};
-      selectedItemChange(item);
+      if(!$scope.dragdrop){
+        item = {value:$scope.dataset[geo.id].name};
+        selectedItemChange(item);
+      } else {
+        $scope.dragdrop=false;
+      }
     }
 
     var self = this;

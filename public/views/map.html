@@ -1,4 +1,4 @@
-<div layout="row" layout-sm="column">
+<div layout="row" layout-sm="column" ng-mousemove="mouseMove()" ng-mousedown="mousedown = true" ng-mouseup="mousedown=false" ng-init="mousedown=false">
   <md-content layout="column" flex style="background:#004586;">
     <md-autocomplete
     ng-model="ctrl.country.name"
